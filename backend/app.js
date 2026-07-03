@@ -32,6 +32,7 @@ app.use(morgan("dev"));
 //   limit: 10,
 // });
 
+app.set("trust proxy", 1);
 const limiter = createLimiter();
 const summariseLimiter = createLimiter({
   windowMs: 60 * 60 * 1000,
