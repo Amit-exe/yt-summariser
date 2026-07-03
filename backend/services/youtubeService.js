@@ -1,13 +1,28 @@
-const { fetchTranscript } = require("youtube-transcript");
-
 const AppError = require("../middleware/AppError");
-async function getTranscript(videoId) {
+const { Supadata } = require("@supadata/js");
+const supadata = new Supadata({
+  apiKey: process.env.SUPADATA_API_KEY,
+});
+
+async function getTranscript(videoUrl) {
   try {
-    const res = await fetchTranscript(videoId);
+    const transcriptResult = await supadata.transcript({
+      url: videoUrl,
+      lang: "en",
+      text: true,
+      mode: "auto", // 'native', 'auto', or 'generate'
+    });
 
-    const transcript = res.reduce((a, b) => a + " " + b.text, "");
+    // console.log(transcriptResult);
 
-    return transcript;
+    // const transcript = transcriptResult.content.reduce(
+    //   (a, b) => a + " " + b.text,
+    //   "",
+    // );
+
+    // console.log(transcript);
+
+    return transcriptResult.content;
   } catch (error) {
     throw new AppError("Could not fetch transcript for this video", 400);
   }

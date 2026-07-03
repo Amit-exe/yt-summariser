@@ -15,6 +15,7 @@ function useSummarise() {
     },
     onSuccess: (data) => {
       setSummary(data);
+      setError(null);
       queryClient.invalidateQueries({ queryKey: ["history"] });
     },
     onError: (error) => {
