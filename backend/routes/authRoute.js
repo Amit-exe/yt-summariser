@@ -3,13 +3,13 @@ const authRouter = app.Router();
 const {
   register,
   login,
-  refershToken,
+  refreshToken,
   logout,
 } = require("../controllers/authController");
 
 authRouter.post("/register", register);
 authRouter.post("/login", login);
 authRouter.post("/logout", logout);
-authRouter.post("/refershToken", refershToken);
+authRouter.post("/refershToken", refreshToken);
 
 module.exports = authRouter;

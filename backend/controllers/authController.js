@@ -59,7 +59,7 @@ const login = async (req, res, next) => {
   }
 };
 
-const refershToken = async (req, res, next) => {
+const refreshToken = async (req, res, next) => {
   try {
     const { refreshToken: refToken } = req.body;
 
@@ -105,4 +105,4 @@ const logout = async (req, res, next) => {
   }
 };
 
-module.exports = { register, login, refershToken, logout };
+module.exports = { register, login, refreshToken, logout };

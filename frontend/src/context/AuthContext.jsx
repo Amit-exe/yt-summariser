@@ -1,12 +1,14 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import api from "../api/axios";
 import { setTokens, clearTokens } from "../api/axios";
+import { useQueryClient } from "@tanstack/react-query";
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
 
   // On app startup — restore session if refresh token exists
   useEffect(() => {
@@ -48,6 +50,7 @@ export function AuthProvider({ children }) {
       await api.post("/api/auth/logout", { refreshToken });
     } catch (error) {
     } finally {
+      queryClient.removeQueries({ queryKey: ["history"] });
       setUser(null);
       clearTokens();
     }

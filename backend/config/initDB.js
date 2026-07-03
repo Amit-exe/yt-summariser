@@ -20,7 +20,6 @@ const initDb = async () => {
 
       CREATE TABLE IF NOT EXISTS summaries (
         id SERIAL PRIMARY KEY,
-        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
         video_id VARCHAR(50) NOT NULL,
         video_url TEXT NOT NULL,
         summary_type VARCHAR(20) NOT NULL,
@@ -29,6 +28,14 @@ const initDb = async () => {
         cached BOOLEAN DEFAULT FALSE,
         created_at TIMESTAMP DEFAULT NOW(),
         UNIQUE(video_id, summary_type)
+      );
+
+      CREATE TABLE IF NOT EXISTS user_summaries (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+        summary_id INTEGER REFERENCES summaries(id) ON DELETE CASCADE,
+        created_at TIMESTAMP DEFAULT NOW(),
+        UNIQUE(user_id, summary_id)
       );
     `);
     console.log("✅ Tables created");
