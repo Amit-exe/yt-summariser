@@ -34,7 +34,7 @@ api.interceptors.response.use(
         const storedRefresh = localStorage.getItem("refreshToken");
         if (storedRefresh) {
           const { data } = await axios.post(
-            `${import.meta.env.VITE_API_URL}/api/auth/refreshToken`,
+            `${import.meta.env.VITE_API_URL}/api/auth/refresh`,
             { refreshToken: storedRefresh },
           );
 

@@ -27,7 +27,7 @@ const summarise = async (req, res, next) => {
       );
       return res.json({ summary, title: summary_title, cached: true });
     } else {
-      const transcript = await getTranscript(videoUrl);
+      const transcript = await getTranscript(video_id, videoUrl);
       const { title, summary: summaryText } = await generateSummary(
         transcript,
         summaryType,

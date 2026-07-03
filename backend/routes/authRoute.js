@@ -10,6 +10,6 @@ const {
 authRouter.post("/register", register);
 authRouter.post("/login", login);
 authRouter.post("/logout", logout);
-authRouter.post("/refershToken", refreshToken);
+authRouter.post("/refersh", refreshToken);
 
 module.exports = authRouter;

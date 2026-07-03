@@ -37,6 +37,14 @@ const initDb = async () => {
         created_at TIMESTAMP DEFAULT NOW(),
         UNIQUE(user_id, summary_id)
       );
+
+      CREATE TABLE IF NOT EXISTS transcripts (
+        id SERIAL PRIMARY KEY,
+        video_id VARCHAR(50) UNIQUE NOT NULL,
+        video_url TEXT,
+        transcript TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW()
+      );
     `);
     console.log("✅ Tables created");
   } catch (err) {

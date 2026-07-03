@@ -1,29 +1,40 @@
 const AppError = require("../middleware/AppError");
 const { Supadata } = require("@supadata/js");
-const supadata = new Supadata({
-  apiKey: process.env.SUPADATA_API_KEY,
-});
+const pool = require("../config/db");
 
-async function getTranscript(videoUrl) {
+const supadata = new Supadata({ apiKey: process.env.SUPADATA_API_KEY });
+
+async function getTranscript(videoId, videoUrl) {
   try {
+    // Check cache first
+    const cached = await pool.query(
+      "SELECT transcript FROM transcripts WHERE video_id=$1",
+      [videoId],
+    );
+
+    if (cached.rows.length > 0) {
+      return cached.rows[0].transcript;
+    }
+
+    // Cache miss — fetch from Supadata
     const transcriptResult = await supadata.transcript({
       url: videoUrl,
       lang: "en",
       text: true,
-      mode: "auto", // 'native', 'auto', or 'generate'
+      mode: "auto",
     });
 
-    // console.log(transcriptResult);
+    const transcript = transcriptResult.content;
 
-    // const transcript = transcriptResult.content.reduce(
-    //   (a, b) => a + " " + b.text,
-    //   "",
-    // );
+    // Save to cache
+    await pool.query(
+      "INSERT INTO transcripts (video_id, video_url, transcript) VALUES ($1, $2, $3)",
+      [videoId, videoUrl, transcript],
+    );
 
-    // console.log(transcript);
-
-    return transcriptResult.content;
+    return transcript;
   } catch (error) {
+    if (error instanceof AppError) throw error;
     throw new AppError("Could not fetch transcript for this video", 400);
   }
 }

@@ -10,8 +10,8 @@ An AI-powered YouTube video summariser built with Node.js, React, PostgreSQL, an
 
 ![alt text](image.png)
 
-- **Frontend:** [will update soon](#)
-- **Backend:** [will update soon](#) ←
+- **Frontend:** [yt-summariser](https://yt-summariser-jzbv14th5-amits-projects-75fe8a35.vercel.app/dashboard)
+- **Backend:** [yt-summariser](https://yt-summariser-vuqv.onrender.com)
 
 ---
 
