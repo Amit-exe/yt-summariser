@@ -8,6 +8,8 @@ An AI-powered YouTube video summariser built with Node.js, React, PostgreSQL, an
 
 ## Live Demo
 
+![alt text](image.png)
+
 - **Frontend:** [will update soon](#)
 - **Backend:** [will update soon](#) ←
 
