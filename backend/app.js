@@ -12,10 +12,7 @@ require("./config/db");
 // Middleware
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://yt-summariser-vuqv.onrender.com",
-    ],
+    origin: ["http://localhost:5173", "https://yt-summariser-eta.vercel.app/"],
     credentials: true,
   }),
 );
