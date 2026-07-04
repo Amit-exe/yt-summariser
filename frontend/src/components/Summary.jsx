@@ -2,16 +2,66 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
+import { useState } from "react";
+import removeMd from "remove-markdown";
 
 function Summary({ summary }) {
   const handleCopy = () => {
     navigator.clipboard.writeText(summary.summary);
   };
 
+  const [isReading, setIsReading] = useState(false);
+
+  const handleReadToggle = () => {
+    if (isReading) {
+      window.speechSynthesis.cancel();
+      setIsReading(false);
+    } else {
+      const utterance = new SpeechSynthesisUtterance(removeMd(summary.summary));
+      utterance.lang = "en-US";
+      utterance.rate = 0.9;
+      utterance.pitch = 1;
+
+      // 1. Fetch available system voices
+      const voices = window.speechSynthesis.getVoices();
+
+      // 2. High-priority female voice keywords across Windows, macOS/iOS, and Chrome
+      const femaleKeywords = [
+        "zira",
+        "samantha",
+        "aria",
+        "google",
+        "female",
+        "hazel",
+      ];
+
+      // 3. Search for an English voice that matches our female keywords
+      const targetVoice = voices.find((voice) => {
+        const isEnglish = voice.lang.startsWith("en");
+        const nameLower = voice.name.toLowerCase();
+        const matchesKeyword = femaleKeywords.some((keyword) =>
+          nameLower.includes(keyword),
+        );
+        return isEnglish && matchesKeyword;
+      });
+
+      // 4. Assign the voice if found, otherwise the browser safely uses its default
+      if (targetVoice) {
+        utterance.voice = targetVoice;
+      }
+
+      utterance.onend = () => setIsReading(false);
+
+      window.speechSynthesis.speak(utterance);
+      setIsReading(true);
+    }
+  };
+
   return (
     <div className="mt-4 bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
       {/* Summary header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
+        {/* Left — title + cached badge */}
         <div className="flex items-center gap-3">
           <span className="text-white font-medium text-sm">Summary</span>
           {summary.cached && (
@@ -20,13 +70,29 @@ function Summary({ summary }) {
             </span>
           )}
         </div>
-        <button
-          onClick={handleCopy}
-          type="button"
-          className="text-xs text-slate-400 hover:text-white border border-white/10 hover:border-white/20 px-3 py-1.5 rounded-lg transition-all"
-        >
-          Copy
-        </button>
+
+        {/* Right — action buttons */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleReadToggle}
+            type="button"
+            className={`text-xs px-3 py-1.5 rounded-lg border transition-all ${
+              isReading
+                ? "bg-red-500/10 border-red-500/30 text-red-400 hover:bg-red-500/20"
+                : "text-slate-400 hover:text-white border-white/10 hover:border-white/20"
+            }`}
+          >
+            {isReading ? "⏹ Stop" : "🔊 Read"}
+          </button>
+
+          <button
+            onClick={handleCopy}
+            type="button"
+            className="text-xs text-slate-400 hover:text-white border border-white/10 hover:border-white/20 px-3 py-1.5 rounded-lg transition-all"
+          >
+            Copy
+          </button>
+        </div>
       </div>
 
       {/* Markdown content */}

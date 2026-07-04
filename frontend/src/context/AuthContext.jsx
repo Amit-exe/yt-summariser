@@ -18,7 +18,7 @@ export function AuthProvider({ children }) {
         const storedRefresh = localStorage.getItem("refreshToken");
 
         if (storedRefresh) {
-          const { data } = await api.post(`/api/auth/refershToken`, {
+          const { data } = await api.post(`/api/auth/refersh`, {
             refreshToken: storedRefresh,
           });
 
