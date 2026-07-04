@@ -12,7 +12,7 @@ require("./config/db");
 // Middleware
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://yt-summariser-eta.vercel.app/"],
+    origin: ["http://localhost:5173", "https://yt-summariser-eta.vercel.app"],
     credentials: true,
   }),
 );
@@ -20,22 +20,6 @@ app.use(express.json());
 // app.use(logger);
 
 app.use(morgan("dev"));
-
-// Health check
-
-// let rateLimitOptions = {
-//   windowMs: 15 * 60 * 1000,
-//   limit: 100,
-//   message: { code: 429, message: "Too many requests, please try again later" },
-//   statusCode: 429,
-// };
-
-// const limiter = rateLimit(rateLimitOptions);
-// const limiter2 = rateLimit({
-//   ...rateLimitOptions,
-//   windowMs: 60 * 60 * 1000,
-//   limit: 10,
-// });
 
 app.set("trust proxy", 1);
 const limiter = createLimiter();
