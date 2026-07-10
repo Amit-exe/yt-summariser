@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function Login() {
   const [loading, setLoading] = useState(false);
@@ -9,6 +10,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const { login, user } = useAuth();
   const navigate = useNavigate();
+  const { lightTheme } = useSelector((state) => state.theme);
 
   useEffect(() => {
     if (user) navigate("/dashboard");
@@ -27,20 +29,34 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a1a] flex items-center justify-center px-4">
+    <div
+      className={`min-h-screen flex items-center justify-center px-4 transition-colors duration-300 ${
+        lightTheme ? "bg-gray-50" : "bg-[#0a0a1a]"
+      }`}
+    >
       {/* Background glow effects */}
       <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-[#7A64FF] rounded-full blur-[120px] opacity-20 pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-[#FF508B] rounded-full blur-[120px] opacity-20 pointer-events-none" />
 
       {/* Card */}
-      <div className="relative w-full max-w-md bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 shadow-2xl">
+      <div
+        className={`relative w-full max-w-md backdrop-blur-sm border rounded-2xl p-8 shadow-2xl transition-colors duration-300 ${
+          lightTheme
+            ? "bg-white border-gray-200"
+            : "bg-white/5 border-white/10"
+        }`}
+      >
         {/* Logo / Title */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-[#29E9F5] via-[#7A64FF] to-[#FF508B] mb-4">
             <span className="text-white text-xl">▶</span>
           </div>
-          <h1 className="text-2xl font-bold text-white">Welcome back</h1>
-          <p className="text-slate-400 text-sm mt-1">Sign in to your account</p>
+          <h1 className={`text-2xl font-bold ${lightTheme ? "text-gray-900" : "text-white"}`}>
+            Welcome back
+          </h1>
+          <p className={`text-sm mt-1 ${lightTheme ? "text-gray-500" : "text-slate-400"}`}>
+            Sign in to your account
+          </p>
         </div>
 
         {/* Error */}
@@ -53,7 +69,7 @@ function Login() {
         {/* Inputs */}
         <div className="flex flex-col gap-4">
           <div>
-            <label className="text-slate-400 text-xs font-medium mb-1.5 block">
+            <label className={`text-xs font-medium mb-1.5 block ${lightTheme ? "text-gray-500" : "text-slate-400"}`}>
               Email Address
             </label>
             <input
@@ -61,11 +77,15 @@ function Login() {
               onChange={(e) => setEmail(e.target.value)}
               type="email"
               placeholder="amit@example.com"
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-[#7A64FF] focus:ring-1 focus:ring-[#7A64FF] transition-all"
+              className={`w-full px-4 py-3 border rounded-xl placeholder-slate-500 focus:outline-none focus:border-[#7A64FF] focus:ring-1 focus:ring-[#7A64FF] transition-all ${
+                lightTheme
+                  ? "bg-gray-50 border-gray-200 text-gray-900"
+                  : "bg-white/5 border-white/10 text-white"
+              }`}
             />
           </div>
           <div>
-            <label className="text-slate-400 text-xs font-medium mb-1.5 block">
+            <label className={`text-xs font-medium mb-1.5 block ${lightTheme ? "text-gray-500" : "text-slate-400"}`}>
               Password
             </label>
             <input
@@ -73,7 +93,11 @@ function Login() {
               onChange={(e) => setPassword(e.target.value)}
               type="password"
               placeholder="••••••••"
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-[#7A64FF] focus:ring-1 focus:ring-[#7A64FF] transition-all"
+              className={`w-full px-4 py-3 border rounded-xl placeholder-slate-500 focus:outline-none focus:border-[#7A64FF] focus:ring-1 focus:ring-[#7A64FF] transition-all ${
+                lightTheme
+                  ? "bg-gray-50 border-gray-200 text-gray-900"
+                  : "bg-white/5 border-white/10 text-white"
+              }`}
             />
           </div>
         </div>
@@ -89,7 +113,7 @@ function Login() {
         </button>
 
         {/* Footer */}
-        <p className="text-center text-slate-400 text-sm mt-6">
+        <p className={`text-center text-sm mt-6 ${lightTheme ? "text-gray-500" : "text-slate-400"}`}>
           Don't have an account?{" "}
           <Link
             to="/register"

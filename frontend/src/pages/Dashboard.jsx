@@ -6,8 +6,11 @@ import HistoryPanel from "../components/HistoryPanel";
 import Navbar from "../components/Navbar";
 import SelectType from "../components/SelectType";
 import Summary from "../components/Summary";
+import { useSelector } from "react-redux";
 
 function Dashboard() {
+  const { lightTheme } = useSelector((state) => state.theme);
+
   const [url, setUrl] = useState("");
   const [selected, setSelected] = useState("short");
   const { user, logout } = useAuth();
@@ -15,7 +18,11 @@ function Dashboard() {
     useSummarise();
 
   return (
-    <div className="min-h-screen bg-[#0a0a1a]">
+    <div
+      className={`min-h-screen transition-colors duration-300 ${
+        lightTheme ? "bg-gray-50" : "bg-[#0a0a1a]"
+      }`}
+    >
       {/* Background glow effects */}
       <div className="fixed top-1/4 left-1/4 w-96 h-96 bg-[#7A64FF] rounded-full blur-[140px] opacity-10 pointer-events-none" />
       <div className="fixed bottom-1/4 right-1/4 w-96 h-96 bg-[#29E9F5] rounded-full blur-[140px] opacity-10 pointer-events-none" />
@@ -26,10 +33,12 @@ function Dashboard() {
       <div className="max-w-3xl mx-auto px-6 py-12">
         {/* Header */}
         <div className="text-center mb-10">
-          <h1 className="text-3xl font-bold text-white mb-2">
+          <h1
+            className={`text-3xl font-bold mb-2 ${lightTheme ? "text-gray-900" : "text-white"}`}
+          >
             YouTube Summariser
           </h1>
-          <p className="text-slate-400 text-sm">
+          <p className={`text-sm ${lightTheme ? "text-gray-500" : "text-slate-400"}`}>
             Paste a YouTube URL and get an AI-generated summary instantly
           </p>
         </div>
@@ -42,8 +51,16 @@ function Dashboard() {
         )}
 
         {/* Input card */}
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-6 mb-4">
-          <label className="text-slate-400 text-xs font-medium mb-2 block">
+        <div
+          className={`border rounded-2xl p-6 mb-4 transition-colors duration-300 ${
+            lightTheme
+              ? "bg-white border-gray-200 shadow-sm"
+              : "bg-white/5 border-white/10"
+          }`}
+        >
+          <label
+            className={`text-xs font-medium mb-2 block ${lightTheme ? "text-gray-500" : "text-slate-400"}`}
+          >
             YouTube URL
           </label>
           <PasteInputBox inputValue={url} setInputValue={setUrl} />

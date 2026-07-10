@@ -4,8 +4,11 @@ import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import { useState } from "react";
 import removeMd from "remove-markdown";
+import { useSelector } from "react-redux";
 
 function Summary({ summary }) {
+  const { lightTheme } = useSelector((state) => state.theme);
+
   const handleCopy = () => {
     navigator.clipboard.writeText(summary.summary);
   };
@@ -58,12 +61,24 @@ function Summary({ summary }) {
   };
 
   return (
-    <div className="mt-4 bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
+    <div
+      className={`mt-4 border rounded-2xl overflow-hidden transition-colors duration-300 ${
+        lightTheme
+          ? "bg-white border-gray-200 shadow-sm"
+          : "bg-white/5 border-white/10"
+      }`}
+    >
       {/* Summary header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
+      <div
+        className={`flex items-center justify-between px-6 py-4 border-b ${
+          lightTheme ? "border-gray-100" : "border-white/10"
+        }`}
+      >
         {/* Left — title + cached badge */}
         <div className="flex items-center gap-3">
-          <span className="text-white font-medium text-sm">Summary</span>
+          <span className={`font-medium text-sm ${lightTheme ? "text-gray-900" : "text-white"}`}>
+            Summary
+          </span>
           {summary.cached && (
             <span className="text-xs bg-yellow-400/10 text-yellow-400 border border-yellow-400/20 px-2 py-0.5 rounded-full">
               ⚡ Cached
@@ -79,7 +94,9 @@ function Summary({ summary }) {
             className={`text-xs px-3 py-1.5 rounded-lg border transition-all ${
               isReading
                 ? "bg-red-500/10 border-red-500/30 text-red-400 hover:bg-red-500/20"
-                : "text-slate-400 hover:text-white border-white/10 hover:border-white/20"
+                : lightTheme
+                  ? "text-gray-500 hover:text-gray-900 border-gray-200 hover:border-gray-300"
+                  : "text-slate-400 hover:text-white border-white/10 hover:border-white/20"
             }`}
           >
             {isReading ? "⏹ Stop" : "🔊 Read"}
@@ -88,7 +105,11 @@ function Summary({ summary }) {
           <button
             onClick={handleCopy}
             type="button"
-            className="text-xs text-slate-400 hover:text-white border border-white/10 hover:border-white/20 px-3 py-1.5 rounded-lg transition-all"
+            className={`text-xs px-3 py-1.5 rounded-lg border transition-all ${
+              lightTheme
+                ? "text-gray-500 hover:text-gray-900 border-gray-200 hover:border-gray-300"
+                : "text-slate-400 hover:text-white border-white/10 hover:border-white/20"
+            }`}
           >
             Copy
           </button>
@@ -97,15 +118,18 @@ function Summary({ summary }) {
 
       {/* Markdown content */}
       <div
-        className="px-6 py-6 prose prose-invert prose-sm max-w-none
-        prose-headings:text-white prose-headings:font-semibold
-        prose-p:text-slate-300 prose-p:leading-relaxed
-        prose-strong:text-white
-        prose-li:text-slate-300
-        prose-code:text-[#29E9F5] prose-code:bg-white/10 prose-code:px-1 prose-code:rounded
-        prose-blockquote:border-[#7A64FF] prose-blockquote:text-slate-400
-        prose-a:text-[#7A64FF] hover:prose-a:text-[#29E9F5]
-      "
+        className={`px-6 py-6 max-w-none text-sm leading-relaxed ${
+          lightTheme
+            ? "prose prose-sm prose-gray"
+            : `prose prose-invert prose-sm
+              prose-headings:text-white prose-headings:font-semibold
+              prose-p:text-slate-300 prose-p:leading-relaxed
+              prose-strong:text-white
+              prose-li:text-slate-300
+              prose-code:text-[#29E9F5] prose-code:bg-white/10 prose-code:px-1 prose-code:rounded
+              prose-blockquote:border-[#7A64FF] prose-blockquote:text-slate-400
+              prose-a:text-[#7A64FF] hover:prose-a:text-[#29E9F5]`
+        }`}
       >
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}

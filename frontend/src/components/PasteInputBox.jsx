@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 export default function PasteInputBox({ inputValue, setInputValue }) {
   const [error, setError] = useState("");
+  const { lightTheme } = useSelector((state) => state.theme);
 
   const handlePaste = async () => {
     try {
@@ -19,7 +21,9 @@ export default function PasteInputBox({ inputValue, setInputValue }) {
         className={`flex rounded-xl overflow-hidden border transition-all duration-200 ${
           error
             ? "border-red-500/50"
-            : "border-white/10 focus-within:border-[#7A64FF]"
+            : lightTheme
+              ? "border-gray-200 focus-within:border-[#7A64FF]"
+              : "border-white/10 focus-within:border-[#7A64FF]"
         }`}
       >
         <input
@@ -27,7 +31,11 @@ export default function PasteInputBox({ inputValue, setInputValue }) {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="Paste a YouTube URL..."
-          className="w-full px-4 py-3 bg-white/5 text-white placeholder-slate-500 focus:outline-none text-sm"
+          className={`w-full px-4 py-3 placeholder-slate-500 focus:outline-none text-sm transition-colors ${
+            lightTheme
+              ? "bg-gray-50 text-gray-900"
+              : "bg-white/5 text-white"
+          }`}
         />
         <button
           type="button"
